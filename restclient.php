@@ -31,7 +31,8 @@ class RestClient implements Iterator, ArrayAccess {
             'user_agent' => "PHP RestClient/0.1.4", 
             'base_url' => NULL, 
             'format' => NULL, 
-            'format_regex' => "/(\w+)\/(\w+)(;[.+])?/",
+            'format_regex' => "/(\w+)\/(\w+)(;[.+])?/", 
+            'response_format' => NULL, 
             'decoders' => array(
                 'json' => 'json_decode', 
                 'php' => 'unserialize'
@@ -235,7 +236,11 @@ class RestClient implements Iterator, ArrayAccess {
         }
         
         $this->headers = (object) $headers;
-        $this->response = strtok("");
+        
+        if($this->options['response_format'] == 'xml')
+            $this->response = simplexml_load_string($response);
+        else
+            $this->response = $response;
     }
     
     public function get_response_format(){
