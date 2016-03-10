@@ -37,7 +37,8 @@ class RestClient implements Iterator, ArrayAccess {
                 'php' => 'unserialize'
             ), 
             'username' => NULL, 
-            'password' => NULL
+            'password' => NULL, 
+            'files' => array(), 
         );
         
         $this->options = array_merge($default_options, $options);
@@ -157,7 +158,22 @@ class RestClient implements Iterator, ArrayAccess {
         
         if(strtoupper($method) == 'POST'){
             $curlopt[CURLOPT_POST] = TRUE;
-            $curlopt[CURLOPT_POSTFIELDS] = $parameters_string;
+            if (count($client->options['files'])){
+                foreach ($client->options['files'] as $key => $value) {
+                    $filePath = $value;
+
+                    if(function_exists('curl_file_create')) {
+                        $sourceFile = curl_file_create($filePath);
+                    }else{
+                        $sourceFile = '@' . realpath($filePath);
+                    }
+                    
+                    $client->options['parameters'][$key] = $sourceFile;
+                }
+                $curlopt[CURLOPT_POSTFIELDS] = $parameters;
+            }   
+            else    
+                $curlopt[CURLOPT_POSTFIELDS] = $parameters_string;
         }
         elseif(strtoupper($method) != 'GET'){
             $curlopt[CURLOPT_CUSTOMREQUEST] = strtoupper($method);
