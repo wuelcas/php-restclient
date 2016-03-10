@@ -34,7 +34,8 @@ class RestClient implements Iterator, ArrayAccess {
             'format_regex' => "/(\w+)\/(\w+)(;[.+])?/", 
             'decoders' => array(
                 'json' => 'json_decode', 
-                'php' => 'unserialize'
+                'php' => 'unserialize',
+                'xml' => 'simplexml_load_string',
             ), 
             'username' => NULL, 
             'password' => NULL, 
@@ -169,7 +170,7 @@ class RestClient implements Iterator, ArrayAccess {
                         $sourceFile = '@' . realpath($filePath);
                     }
                     
-                    $client->options['parameters'][$key] = $sourceFile;
+                    $parameters = $sourceFile;
                 }
                 $curlopt[CURLOPT_POSTFIELDS] = $parameters;
             }   
@@ -237,8 +238,8 @@ class RestClient implements Iterator, ArrayAccess {
         
         $this->headers = (object) $headers;
 
-        if($this->options['format'] == 'xml')
-            $this->response = simplexml_load_string($response);
+        if($this->options['format'] == 'json')
+            $this->response = strtok("");
         else
             $this->response = $response;
     }
