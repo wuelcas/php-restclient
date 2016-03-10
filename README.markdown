@@ -44,7 +44,7 @@ Configurable Options
 `decoders` - Associative array of format decoders, see documentation below.  
 `username` - Username to use for basic authentication. Requires `password`.  
 `password` - Password to use for basic authentication. Requires `username`.  
-`files` -  Associative array to send files via POST method.
+`files` -  Associative array to send files via POST method.  
 `use_postfix_format` - Flag to append the `format` value at the end of the URL. Default value is false.
 
 Options can be set upon instantiation, or individually afterword:
