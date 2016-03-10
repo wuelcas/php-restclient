@@ -4,8 +4,14 @@ PHP REST Client
 
 Installation
 -----------
+**Using composer**
 ``` sh
 $ php composer.phar require tcdent/php-restclient
+```
+
+**Including the file**
+```php
+require 'path/to/restclient.php'
 ```
 
 Basic Usage
@@ -15,6 +21,7 @@ Basic Usage
 $api = new RestClient(array(
     'base_url' => "https://api.twitter.com/1.1", 
     'format' => "json", 
+    'use_postfix_format' => true,
      // https://dev.twitter.com/docs/auth/application-only-auth
     'headers' => array('Authorization' => 'Bearer '.OAUTH_BEARER), 
 ));
@@ -37,6 +44,8 @@ Configurable Options
 `decoders` - Associative array of format decoders, see documentation below.  
 `username` - Username to use for basic authentication. Requires `password`.  
 `password` - Password to use for basic authentication. Requires `username`.  
+`files` -  Associative array to send files via POST method.
+`use_postfix_format` - Flag to append the `format` value at the end of the URL. Default value is false.
 
 Options can be set upon instantiation, or individually afterword:
 
