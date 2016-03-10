@@ -32,7 +32,6 @@ class RestClient implements Iterator, ArrayAccess {
             'base_url' => NULL, 
             'format' => NULL, 
             'format_regex' => "/(\w+)\/(\w+)(;[.+])?/", 
-            'response_format' => NULL, 
             'decoders' => array(
                 'json' => 'json_decode', 
                 'php' => 'unserialize'
@@ -40,6 +39,7 @@ class RestClient implements Iterator, ArrayAccess {
             'username' => NULL, 
             'password' => NULL, 
             'files' => array(), 
+            'use_postfix_format' => false, 
         );
         
         $this->options = array_merge($default_options, $options);
@@ -144,7 +144,7 @@ class RestClient implements Iterator, ArrayAccess {
             }
         }
         
-        if($client->options['format'])
+        if($client->options['use_postfix_format'] && $client->options['format'])
             $client->url .= '.'.$client->options['format'];
         
         // Allow passing parameters as a pre-encoded string (or something that
@@ -236,8 +236,8 @@ class RestClient implements Iterator, ArrayAccess {
         }
         
         $this->headers = (object) $headers;
-        
-        if($this->options['response_format'] == 'xml')
+
+        if($this->options['format'] == 'xml')
             $this->response = simplexml_load_string($response);
         else
             $this->response = $response;
